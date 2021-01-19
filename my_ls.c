@@ -3,11 +3,10 @@
 
 int main(int argc, char** argv)
 {
-    string_array* files = malloc(sizeof (string_array));
-    files->size = argc - 1;
-    files->array = argv + 1;
-    print(sorted(files));
-    free(files);
+    string_array files;
+    files.size = argc - 1;
+    files.array = argv + 1;
+    print(sorted(&files));
     puts("");
     return 0;
 }
@@ -43,14 +42,13 @@ string_array* sorted(string_array* list)
 
 void sort_partitions(string_array* list, unsigned int i)
 {
-    string_array* partition = malloc(sizeof (string_array));
-    partition->size = i;
-    partition->array = list->array;
-    sorted(partition);
-    partition->size = list->size - (i + 1);
-    partition->array = list->array + i + 1;
-    sorted(partition);
-    free(partition);
+    string_array partition;
+    partition.size = i;
+    partition.array = list->array;
+    sorted(&partition);
+    partition.size = list->size - (i + 1);
+    partition.array = list->array + i + 1;
+    sorted(&partition);
 }
 
 bool smaller_than(char* s1, char* s2)
