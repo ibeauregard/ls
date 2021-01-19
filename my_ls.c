@@ -29,7 +29,7 @@ string_array sorted(string_array list)
     char* pivot = list.array[list.size - 1];
     for (uint j = 0; j < list.size - 1; j++)
     {
-        if (smaller_than(list.array[j], pivot))
+        if (lower_than(list.array[j], pivot))
         {
             swap(&list.array[i], &list.array[j]);
             i++;
@@ -51,7 +51,7 @@ void sort_partitions(string_array list, unsigned int i)
     sorted(partition);
 }
 
-bool smaller_than(char* s1, char* s2)
+bool lower_than(char* s1, char* s2)
 {
     for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
     return *s1 < *s2;
