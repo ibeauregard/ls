@@ -6,49 +6,49 @@ int main(int argc, char** argv)
     string_array files;
     files.size = argc - 1;
     files.array = argv + 1;
-    print(sorted(&files));
+    print(sorted(files));
     puts("");
     return 0;
 }
 
-void print(string_array* list)
+void print(string_array list)
 {
-    for (uint i = 0; i < list->size; i++)
+    for (uint i = 0; i < list.size; i++)
     {
-        printf("%s%c", list->array[i], FILENAME_SEP);
+        printf("%s%c", list.array[i], FILENAME_SEP);
     }
 }
 
-string_array* sorted(string_array* list)
+string_array sorted(string_array list)
 {
-    if (list->size <= 1)
+    if (list.size <= 1)
     {
         return list;
     }
     int i = 0;
-    char* pivot = list->array[list->size - 1];
-    for (uint j = 0; j < list->size - 1; j++)
+    char* pivot = list.array[list.size - 1];
+    for (uint j = 0; j < list.size - 1; j++)
     {
-        if (smaller_than(list->array[j], pivot))
+        if (smaller_than(list.array[j], pivot))
         {
-            swap(&list->array[i], &list->array[j]);
+            swap(&list.array[i], &list.array[j]);
             i++;
         }
     }
-    swap(&list->array[i], &list->array[list->size - 1]);
+    swap(&list.array[i], &list.array[list.size - 1]);
     sort_partitions(list, i);
     return list;
 }
 
-void sort_partitions(string_array* list, unsigned int i)
+void sort_partitions(string_array list, unsigned int i)
 {
     string_array partition;
     partition.size = i;
-    partition.array = list->array;
-    sorted(&partition);
-    partition.size = list->size - (i + 1);
-    partition.array = list->array + i + 1;
-    sorted(&partition);
+    partition.array = list.array;
+    sorted(partition);
+    partition.size = list.size - (i + 1);
+    partition.array = list.array + i + 1;
+    sorted(partition);
 }
 
 bool smaller_than(char* s1, char* s2)
