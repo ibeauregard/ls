@@ -127,49 +127,55 @@ void print(StringArray list)
     }
 }
 
-StringArray sort(StringArray list)
+FileArray sort(FileArray files)
 {
-    if (list.size <= 1)
+    if (files.size <= 1)
     {
-        return list;
+        return files;
     }
     int i = 0;
-    char* pivot = list.array[list.size - 1];
-    for (uint j = 0; j < list.size - 1; j++)
+    File* pivot = files.array[files.size - 1];
+    for (uint j = 0; j < files.size - 1; j++)
     {
-        if (lower_than(list.array[j], pivot))
+        if (lower_than(files.array[j], pivot))
         {
-            swap(&list.array[i], &list.array[j]);
+            swap(&files.array[i], &files.array[j]);
             i++;
         }
     }
-    swap(&list.array[i], &list.array[list.size - 1]);
-    sort_partitions(list, i);
-    return list;
+    swap(&files.array[i], &files.array[files.size - 1]);
+    sort_partitions(files, i);
+    return files;
 }
 
-void sort_partitions(StringArray list, uint i)
+void sort_partitions(FileArray files, uint i)
 {
-    StringArray partition;
+    FileArray partition;
     partition.size = i;
-    partition.array = list.array;
+    partition.array = files.array;
     sort(partition);
-    partition.size = list.size - (i + 1);
-    partition.array = list.array + i + 1;
+    partition.size = files.size - (i + 1);
+    partition.array = files.array + i + 1;
     sort(partition);
 }
 
-bool lower_than(char* s1, char* s2)
+bool lower_than(File* f1, File* f2)
 {
-    for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
-    return *s1 < *s2;
+    // TENTATIVE
+    return f1 < f2;
 }
 
-void swap(char** p1, char** p2)
+// bool lower_than(char* s1, char* s2)
+// {
+//     for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
+//     return *s1 < *s2;
+// }
+
+void swap(File** f1, File** f2)
 {
-    char* temp = *p1;
-    *p1 = *p2;
-    *p2 = temp;
+    File* temp = *f1;
+    *f1 = *f2;
+    *f2 = temp;
 }
 
 void free_operands(Operands operands)

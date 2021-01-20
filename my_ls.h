@@ -71,10 +71,10 @@ FileArray* initialize_file_array(FileArray* files, uint size);
 void print(StringArray list);
 
 //sorting
-StringArray sort(StringArray list);
-void sort_partitions(StringArray list, uint i);
-bool lower_than(char* s1, char* s2);
-void swap(char** p1, char** p2);
+FileArray sort(FileArray files);
+void sort_partitions(FileArray list, uint i);
+bool lower_than(File* f1, File* f2);
+void swap(File** f1, File** f2);
 
 //free
 void free_operands(Operands operands);
