@@ -85,7 +85,7 @@ bool string_lower_than(char* s1, char* s2);
 void swap(File** f1, File** f2);
 
 void print(FileArray* files, bool timesort);
-void print_dirs(FileArray* directories, bool timesort);
+void print_dirs(FileArray* directories, bool nondirs, bool timesort);
 void print_directory_content(File* directory, bool timesort);
 
 //strings

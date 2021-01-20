@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     {
         puts("");
     }
-    print_dirs(&directories, true);
+    print_dirs(&directories, nondirectories.size, true);
     return EXIT_SUCCESS;
 }
 
@@ -209,11 +209,15 @@ void print(FileArray* files, bool timesort)
     }
 }
 
-void print_dirs(FileArray* dirs, bool timesort)
+void print_dirs(FileArray* dirs, bool nondirs, bool timesort)
 {
     sort(dirs, timesort);
     for (uint i = 0; i < dirs->size; i++)
     {
+        if (nondirs || dirs->size > 1)
+        {
+            printf("%s:\n", dirs->array[i]->path);
+        }
         print_directory_content(dirs->array[i], timesort);
         free(dirs->array[i]);
         if (i < dirs->size - 1)
@@ -226,7 +230,6 @@ void print_dirs(FileArray* dirs, bool timesort)
 
 void print_directory_content(File* directory, bool timesort)
 {
-    printf("%s:\n", directory->path);
     DIR* folder = opendir(directory->path);
     uint n_files;
     for (n_files = 0; readdir(folder); n_files++);
