@@ -5,6 +5,7 @@
 
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
+#define CURRENT_DIR "."
 #define INVALID_ARG_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 
 #ifndef STRUCT_STAT
@@ -63,6 +64,8 @@ typedef struct
     FileNode* first; 
 } Operands;
 #endif
+
+int my_ls(int n_arguments, char**arguments);
 
 // operand parsing
 void initialize_operands(Operands* operands);
