@@ -4,6 +4,7 @@
 #include <dirent.h>
 
 #define FILENAME_SEP "  "
+#define PATH_SEP "/"
 #define INVALID_ARG_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 
 #ifndef STRUCT_STAT
@@ -83,12 +84,14 @@ bool file_time_lower_than(File* f1, File* f2);
 bool string_lower_than(char* s1, char* s2);
 void swap(File** f1, File** f2);
 
-void print(FileArray* files);
+void print(FileArray* files, bool timesort);
 void print_dirs(FileArray* directories, bool timesort);
 void print_directory_content(File* directory, bool timesort);
 
 //strings
-char* get_path(char* dirpath, char* name);
+char* build_path(char* dirpath, char* name);
+char* my_strcpy(char* dest, const char* source);
+char* my_strcat(char* dest, const char* source);
 
 //free
 void free_operands(Operands* operands);

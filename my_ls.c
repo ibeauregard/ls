@@ -25,12 +25,12 @@ int main(int argc, char** argv)
         initialize_file_array(&directories, operands.n_dirs),
         initialize_file_array(&nondirectories, operands.n_nondirs)
     );
-    print(sort(&nondirectories, false));
+    print(&nondirectories, true);
     if (nondirectories.size && directories.size)
     {
         puts("");
     }
-    print_dirs(sort(&directories, false), false);
+    print_dirs(&directories, true);
     return EXIT_SUCCESS;
 }
 
@@ -193,8 +193,9 @@ void swap(File** f1, File** f2)
     *f2 = temp;
 }
 
-void print(FileArray* files)
+void print(FileArray* files, bool timesort)
 {
+    sort(files, timesort);
     uint i;
     for (i = 0; i < files->size; i++)
     {
@@ -210,6 +211,7 @@ void print(FileArray* files)
 
 void print_dirs(FileArray* dirs, bool timesort)
 {
+    sort(dirs, timesort);
     for (uint i = 0; i < dirs->size; i++)
     {
         print_directory_content(dirs->array[i], timesort);
@@ -237,19 +239,43 @@ void print_directory_content(File* directory, bool timesort)
         Dirent* entry = readdir(folder);
         Stat fileStat;
         stat(entry->d_name, &fileStat);
-        //char* path = get_path(directory.path, entry->d_name);
-        //printf("STAT %d\n", stat(path, &fileStat));
-        //free(path);
+        char* path = build_path(directory->path, entry->d_name);
+        stat(path, &fileStat);
+        free(path);
         files.array[i] = get_file_from_stat(&fileStat, entry->d_name);
     }
-    print(sort(&files, timesort));
+    print(&files, timesort);
     closedir(folder);
 }
 
-// char* get_path(char* dirpath, char* name)
-// {
-    
-// }
+char* build_path(char* dirpath, char* name)
+{
+    char* path = malloc(strlen(dirpath) + strlen(PATH_SEP) + strlen(name) + 1);
+    return my_strcat(my_strcat(my_strcpy(path, dirpath), PATH_SEP), name);   
+}
+
+char* my_strcpy(char* dest, const char* source)
+{
+    uint i;
+    for (i = 0; source[i]; i++)
+    {
+        dest[i] = source[i];
+    }
+    dest[i] = 0;
+    return dest;
+}
+
+char* my_strcat(char* dest, const char* source)
+{
+    uint i, j;
+    for (i = 0; dest[i]; i++);
+    for (j = 0; source[j]; j++)
+    {
+        dest[i + j] = source[j];   
+    }
+    dest[i + j] = 0;
+    return dest;
+}
 
 void free_operands(Operands* operands)
 {
