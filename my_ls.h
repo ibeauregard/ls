@@ -68,13 +68,14 @@ File* get_file_from_stat(Stat fileStat, char* path);
 FileNode* get_file_node(Stat fileStat, char* path);
 FileArray* initialize_file_array(FileArray* files, uint size);
 
-void print(StringArray list);
-
 //sorting
 FileArray sort(FileArray files);
 void sort_partitions(FileArray list, uint i);
-bool lower_than(File* f1, File* f2);
+bool file_lower_than(File* f1, File* f2);
+bool string_lower_than(char* s1, char* s2);
 void swap(File** f1, File** f2);
+
+void print(FileArray list);
 
 //free
 void free_operands(Operands operands);

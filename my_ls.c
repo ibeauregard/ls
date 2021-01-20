@@ -25,6 +25,8 @@ int main(int argc, char** argv)
         initialize_file_array(&directories, operands.n_dirs),
         initialize_file_array(&nondirectories, operands.n_nondirs)
     );
+    print(sort(nondirectories));
+    puts("");
     
     free_all(directories, nondirectories);
     return EXIT_SUCCESS;
@@ -119,14 +121,6 @@ FileArray* initialize_file_array(FileArray* files, uint size)
     return files;
 }
 
-void print(StringArray list)
-{
-    for (uint i = 0; i < list.size; i++)
-    {
-        printf("%s%c", list.array[i], FILENAME_SEP);
-    }
-}
-
 FileArray sort(FileArray files)
 {
     if (files.size <= 1)
@@ -137,7 +131,7 @@ FileArray sort(FileArray files)
     File* pivot = files.array[files.size - 1];
     for (uint j = 0; j < files.size - 1; j++)
     {
-        if (lower_than(files.array[j], pivot))
+        if (file_lower_than(files.array[j], pivot))
         {
             swap(&files.array[i], &files.array[j]);
             i++;
@@ -159,23 +153,30 @@ void sort_partitions(FileArray files, uint i)
     sort(partition);
 }
 
-bool lower_than(File* f1, File* f2)
+bool file_lower_than(File* f1, File* f2)
 {
-    // TENTATIVE
-    return f1 < f2;
+    return string_lower_than(f1->path, f2->path);
 }
 
-// bool lower_than(char* s1, char* s2)
-// {
-//     for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
-//     return *s1 < *s2;
-// }
+bool string_lower_than(char* s1, char* s2)
+{
+    for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
+    return *s1 < *s2;
+}
 
 void swap(File** f1, File** f2)
 {
     File* temp = *f1;
     *f1 = *f2;
     *f2 = temp;
+}
+
+void print(FileArray files)
+{
+    for (uint i = 0; i < files.size; i++)
+    {
+        printf("%s%c", files.array[i]->path, FILENAME_SEP);
+    }
 }
 
 void free_operands(Operands operands)
@@ -200,7 +201,6 @@ void free_files(FileArray files)
 {
     for (uint i = 0; i < files.size; i++)
     {
-        printf("Freeing file %s\n", files.array[i]->path);
         free(files.array[i]);
     }
     free(files.array);
