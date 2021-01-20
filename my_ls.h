@@ -57,20 +57,29 @@ typedef struct
 } Operands;
 #endif
 
+// operand parsing
 void initialize_operands(Operands* operands);
 int handle_operand(char* path, Operands* operands, FileNode** last);
-FileArray* initialize_file_array(FileArray* files, uint size);
-FileNode* get_file_node(Stat fileStat, char* path);
-File* get_file_from_stat(Stat fileStat, char* path);
 void update_operand_counts(Operands* operands, FileNode* node);
 void update_links(Operands* operands, FileNode** last, FileNode* node);
 void split_operands(Operands operands, FileArray* directories, FileArray* nondirectories);
-void free_operands(Operands operands);
+
+File* get_file_from_stat(Stat fileStat, char* path);
+FileNode* get_file_node(Stat fileStat, char* path);
+FileArray* initialize_file_array(FileArray* files, uint size);
+
 void print(StringArray list);
+
+//sorting
 StringArray sort(StringArray list);
 void sort_partitions(StringArray list, uint i);
 bool lower_than(char* s1, char* s2);
 void swap(char** p1, char** p2);
+
+//free
+void free_operands(Operands operands);
 void free_all(FileArray directories, FileArray nondirectories);
 void free_files(FileArray files);
+
+//errors
 int operand_error(char* path, Operands operands);

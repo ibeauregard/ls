@@ -49,30 +49,6 @@ int handle_operand(char* path, Operands* operands, FileNode** last)
     return 0;
 }
 
-FileArray* initialize_file_array(FileArray* files, uint size)
-{
-    files->size = size;
-    files->array = malloc(size * sizeof (File*));
-    return files;
-}
-
-FileNode* get_file_node(Stat fileStat, char* path)
-{
-    FileNode* node = malloc(sizeof (FileNode));
-    node->file = get_file_from_stat(fileStat, path);
-    node->next = NULL;
-    return node;
-}
-
-File* get_file_from_stat(Stat fileStat, char* path)
-{
-    File* file = malloc(sizeof (File));
-    file->path = path;
-    file->isdir = S_ISDIR(fileStat.st_mode);
-    file->mtim = fileStat.st_mtim;
-    return file;
-}
-
 void update_operand_counts(Operands* operands, FileNode* node)
 {
     if (node->file->isdir)
@@ -119,16 +95,28 @@ void split_operands(Operands operands, FileArray* directories, FileArray* nondir
     }
 }
 
-void free_operands(Operands operands)
+File* get_file_from_stat(Stat fileStat, char* path)
 {
-    FileNode* node = operands.first;
-    while (node)
-    {
-        free(node->file);
-        FileNode* current = node;
-        node = node->next;
-        free(current);
-    }
+    File* file = malloc(sizeof (File));
+    file->path = path;
+    file->isdir = S_ISDIR(fileStat.st_mode);
+    file->mtim = fileStat.st_mtim;
+    return file;
+}
+
+FileNode* get_file_node(Stat fileStat, char* path)
+{
+    FileNode* node = malloc(sizeof (FileNode));
+    node->file = get_file_from_stat(fileStat, path);
+    node->next = NULL;
+    return node;
+}
+
+FileArray* initialize_file_array(FileArray* files, uint size)
+{
+    files->size = size;
+    files->array = malloc(size * sizeof (File*));
+    return files;
 }
 
 void print(StringArray list)
@@ -182,6 +170,18 @@ void swap(char** p1, char** p2)
     char* temp = *p1;
     *p1 = *p2;
     *p2 = temp;
+}
+
+void free_operands(Operands operands)
+{
+    FileNode* node = operands.first;
+    while (node)
+    {
+        free(node->file);
+        FileNode* current = node;
+        node = node->next;
+        free(current);
+    }
 }
 
 void free_all(FileArray directories, FileArray nondirectories) 
