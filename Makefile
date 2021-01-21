@@ -13,7 +13,7 @@ $(MAIN): $(OBJS)
 	$(RM) *.o
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) $(CFLAGS) -c $<  -o $@
 
 clean:
 	$(RM) $(MAIN)
