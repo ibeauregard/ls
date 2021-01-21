@@ -1,23 +1,19 @@
-SRCS := $(wildcard *.c)
-BINS := $(SRCS:%.c=%)
-
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+LINKERFLAG = -lm
+SRCS = _string.c my_ls.c
+OBJS = $(SRCS:.c=.o)
+MAIN = my_ls
 .PHONY = all clean
 
-CC = gcc                        # compiler to use
+all: $(MAIN)
 
-LINKERFLAG = -lm
-CFLAGS = -c -Wall -Wextra -Werror -g3 -fsanitize=address
+$(MAIN): $(OBJS)
+	$(CC) $(CFLAGS) -o $(MAIN) $(LINKERFLAG) $(OBJS)
+	$(RM) *.o
 
-all: ${BINS}
-
-%: %.o
-	@echo "Checking.."
-	${CC} ${LINKERFLAG} $< -o $@
-
-%.o: %.c
-	@echo "Creating object.."
-	${CC} ${CFLAGS} $<
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
-	@echo "Cleaning up..."
-	rm -rvf *.o ${BINS}
+	$(RM) $(MAIN)
