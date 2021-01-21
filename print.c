@@ -11,6 +11,9 @@ static uint count_files(const File* directory);
 static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_hidden, FileArray* output);
 static void print_newline();
 static char* build_path(char* fullpath, const char* dirpath, const char* name);
+static bool file_time_lower_than(const File* f1, const File* f2);
+static bool file_path_lower_than(const File* f1, const File* f2);
+static SortKey* sort_key(bool timesort);
 
 void print(FileArray* files, FileArray* directories, Options* options)
 {
@@ -21,7 +24,7 @@ void print(FileArray* files, FileArray* directories, Options* options)
 
 static void print_files(FileArray* files, bool timesort)
 {
-    sort(files, timesort);
+    sort(files, sort_key(timesort));
     uint i;
     for (i = 0; i < files->size; i++)
     {
@@ -41,7 +44,7 @@ static void print_directories(FileArray* dirs, bool nondirs, Options* options)
     {
         print_newline();
     }
-    sort(dirs, options->t);
+    sort(dirs, sort_key(options->t));
     for (uint i = 0; i < dirs->size; i++)
     {
         if (nondirs || i >= 1)
@@ -107,4 +110,27 @@ static void print_newline()
 static char* build_path(char* fullpath, const char* dirpath, const char* name)
 {
     return _strcat(_strcat(_strcpy(fullpath, dirpath), PATH_SEP), name);   
+}
+
+static bool file_time_lower_than(const File* f1, const File* f2)
+{
+    if (f1->mtim.tv_sec == f2->mtim.tv_sec)
+    {
+        if (f1->mtim.tv_nsec == f2->mtim.tv_nsec)
+        {
+            return file_path_lower_than(f1, f2);
+        }
+        return f1->mtim.tv_nsec > f2->mtim.tv_nsec;
+    }
+    return f1->mtim.tv_sec > f2->mtim.tv_sec;
+}
+
+static bool file_path_lower_than(const File* f1, const File* f2)
+{
+    return string_lower_than(f1->path, f2->path);
+}
+
+static SortKey* sort_key(bool timesort)
+{
+    return timesort ? &file_time_lower_than : &file_path_lower_than;
 }

@@ -1,3 +1,9 @@
+#include <stdbool.h>
 #include "file_array.h"
 
-FileArray* sort(FileArray* files, bool time);
+#ifndef SORT_KEY
+#define SORT_KEY
+typedef bool SortKey(const File*, const File*);
+#endif
+
+FileArray* sort(FileArray* files, SortKey* key);
