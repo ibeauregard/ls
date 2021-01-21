@@ -1,7 +1,7 @@
 SRCS := $(wildcard *.c)
 BINS := $(SRCS:%.c=%)
 
-.PHONY = all
+.PHONY = all clean
 
 CC = gcc                        # compiler to use
 
