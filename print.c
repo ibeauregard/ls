@@ -86,7 +86,6 @@ static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_
     {
         if (starts_with(entry->d_name, '.') && !show_hidden)
         {
-            printf("Do not add: %s\n", entry->d_name);
             output->size--;
             continue;
         }
