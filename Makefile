@@ -1,11 +1,23 @@
-CC = gcc
+SRCS := $(wildcard *.c)
+BINS := $(SRCS:%.c=%)
+
+.PHONY = all
+
+CC = gcc                        # compiler to use
+
+LINKERFLAG = -lm
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-TARGET = my_ls
 
-.PHONY: $(TARGET)
+all: ${BINS}
 
-$(TARGET):
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
+%: %.o
+	@echo "Checking.."
+	${CC} ${LINKERFLAG} $< -o $@
+
+%.o: %.c
+	@echo "Creating object.."
+	${CC} ${CFLAGS} $<
 
 clean:
-	$(RM) my_ls
+	@echo "Cleaning up..."
+	rm -rvf *.o ${BINS}
