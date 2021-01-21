@@ -93,7 +93,7 @@ void print_dirs(FileArray* directories, bool nondirs, bool timesort);
 void print_directory_content(File* directory, bool timesort);
 
 //strings
-char* build_path(char* dirpath, char* name);
+char* build_path(char* fullpath, char* dirpath, char* name);
 char* my_strcpy(char* dest, const char* source);
 char* my_strcat(char* dest, const char* source);
 

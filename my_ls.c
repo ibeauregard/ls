@@ -250,19 +250,20 @@ void print_directory_content(File* directory, bool timesort)
         Dirent* entry = readdir(folder);
         Stat fileStat;
         stat(entry->d_name, &fileStat);
-        char* path = build_path(directory->path, entry->d_name);
-        stat(path, &fileStat);
-        free(path);
+        char path[strlen(directory->path)
+                    + strlen(PATH_SEP)
+                    + strlen(entry->d_name)
+                    + 1];
+        stat(build_path(path, directory->path, entry->d_name), &fileStat);
         files.array[i] = get_file_from_stat(&fileStat, entry->d_name);
     }
     print(&files, timesort);
     closedir(folder);
 }
 
-char* build_path(char* dirpath, char* name)
+char* build_path(char* fullpath, char* dirpath, char* name)
 {
-    char* path = malloc(strlen(dirpath) + strlen(PATH_SEP) + strlen(name) + 1);
-    return my_strcat(my_strcat(my_strcpy(path, dirpath), PATH_SEP), name);   
+    return my_strcat(my_strcat(my_strcpy(fullpath, dirpath), PATH_SEP), name);   
 }
 
 char* my_strcpy(char* dest, const char* source)
