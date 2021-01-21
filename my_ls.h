@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <dirent.h>
+#include "_string.h"
 
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
@@ -87,9 +88,6 @@ void print_newline();
 
 //strings
 char* build_path(char* fullpath, const char* dirpath, const char* name);
-char* _strcpy(char* dest, const char* source);
-char* _strcat(char* dest, const char* source);
-uint _strlen(const char* str);
 
 //free
 void free_operands(const Operands* operands);

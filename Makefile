@@ -6,7 +6,7 @@ BINS := $(SRCS:%.c=%)
 CC = gcc                        # compiler to use
 
 LINKERFLAG = -lm
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -c -Wall -Wextra -Werror -g3 -fsanitize=address
 
 all: ${BINS}
 
