@@ -1,4 +1,5 @@
 #include "operands.h"
+#include "file_array.h"
 #include "print.h"
 
 int my_ls(int n_arguments, char** arguments)
@@ -17,7 +18,6 @@ int my_ls(int n_arguments, char** arguments)
             return operand_error(arguments[i], &operands);
         }
     }
-    
     FileArray directories;
     FileArray nondirectories;
     split_operands(
