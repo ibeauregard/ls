@@ -14,18 +14,7 @@ typedef struct
 } Operands;
 #endif
 
-// operand parsing
 void initialize_operands(Operands* operands);
 int handle_operand(char* path, Operands* operands);
-void update_operand_counts(Operands* operands, const FileNode* node);
-void update_links(Operands* operands, FileNode* node);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
-
-//strings
-char* build_path(char* fullpath, const char* dirpath, const char* name);
-
-//free
-void free_operands(const Operands* operands);
-
-//errors
 int operand_error(const char* path, const Operands* operands);
