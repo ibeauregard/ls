@@ -7,6 +7,7 @@
 static void print_nondirs (FileArray* files, bool timesort);
 static void print_dirs(FileArray* directories, bool nondirs, bool timesort);
 static void print_directory_content(const File* directory, bool timesort);
+static uint get_num_files_in_dir(const File* directory);
 static void print_newline();
 static char* build_path(char* fullpath, const char* dirpath, const char* name);
 
@@ -57,13 +58,10 @@ void print_dirs(FileArray* dirs, bool nondirs, bool timesort)
 
 static void print_directory_content(const File* directory, bool timesort)
 {
-    DIR* folder = opendir(directory->path);
-    uint n_files;
-    for (n_files = 0; readdir(folder); n_files++);
-    closedir(folder);
+    uint n_files = get_num_files_in_dir(directory);
     FileArray files;
     initialize_file_array(&files, n_files);
-    folder = opendir(directory->path);
+    DIR* folder = opendir(directory->path);
     for (uint i = 0; i < n_files; i++)
     {
         Dirent* entry = readdir(folder);
@@ -78,6 +76,15 @@ static void print_directory_content(const File* directory, bool timesort)
     }
     print_nondirs(&files, timesort);
     closedir(folder);
+}
+
+static uint get_num_files_in_dir(const File* directory)
+{
+    uint n_files;
+    DIR* folder = opendir(directory->path);
+    for (n_files = 0; readdir(folder); n_files++);
+    closedir(folder);
+    return n_files;
 }
 
 static void print_newline()
