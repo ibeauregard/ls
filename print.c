@@ -5,17 +5,17 @@
 #include <dirent.h>
 
 static void print_files(FileArray* files, bool timesort);
-static void print_directories(FileArray* directories, bool nondirs, bool timesort);
-static void print_dircontent(const File* directory, bool timesort);
-static uint get_num_files_in_dir(const File* directory);
-static void parse_folder(DIR* folder, const char* path, uint n_files, FileArray* output);
+static void print_directories(FileArray* dirs, bool nondirs, Options* options);
+static void print_dircontent(const File* directory, Options* options);
+static uint count_files(const File* directory);
+static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_hidden, FileArray* output);
 static void print_newline();
 static char* build_path(char* fullpath, const char* dirpath, const char* name);
 
-void print(FileArray* dircontent, FileArray* directories, Options* options)
+void print(FileArray* files, FileArray* directories, Options* options)
 {
-    print_files(dircontent, options->t);
-    print_directories(directories, dircontent->size, options->t);
+    print_files(files, options->t);
+    print_directories(directories, files->size, options);
     free(options);
 }
 
@@ -35,20 +35,20 @@ static void print_files(FileArray* files, bool timesort)
     }
 }
 
-static void print_directories(FileArray* dirs, bool nondirs, bool timesort)
+static void print_directories(FileArray* dirs, bool nondirs, Options* options)
 {
     if (nondirs && dirs->size)
     {
         print_newline();
     }
-    sort(dirs, timesort);
+    sort(dirs, options->t);
     for (uint i = 0; i < dirs->size; i++)
     {
         if (nondirs || i >= 1)
         {
             printf("%s:\n", dirs->array[i]->path);
         }
-        print_dircontent(dirs->array[i], timesort);
+        print_dircontent(dirs->array[i], options);
         free(dirs->array[i]);
         if (i < dirs->size - 1)
         {
@@ -58,17 +58,17 @@ static void print_directories(FileArray* dirs, bool nondirs, bool timesort)
     free(dirs->array);
 }
 
-static void print_dircontent(const File* directory, bool timesort)
+static void print_dircontent(const File* directory, Options* options)
 {
-    uint n_files = get_num_files_in_dir(directory);
+    uint n_files = count_files(directory);
     FileArray files;
     DIR* folder = opendir(directory->path);
-    parse_folder(folder, directory->path, n_files, &files);
-    print_files(&files, timesort);
+    parse_folder(folder, directory->path, n_files, options->a, &files);
+    print_files(&files, options->t);
     closedir(folder);
 }
 
-static uint get_num_files_in_dir(const File* directory)
+static uint count_files(const File* directory)
 {
     uint n_files;
     DIR* folder = opendir(directory->path);
@@ -77,20 +77,26 @@ static uint get_num_files_in_dir(const File* directory)
     return n_files;
 }
 
-static void parse_folder(DIR* folder, const char* path, uint n_files, FileArray* output)
+static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_hidden, FileArray* output)
 {
+    Dirent* entry;
+    uint i = 0;
     initialize_file_array(output, n_files);
-    for (uint i = 0; i < n_files; i++)
+    while ((entry = readdir(folder)))
     {
-        Dirent* entry = readdir(folder);
+        if (starts_with(entry->d_name, '.') && !show_hidden)
+        {
+            printf("Do not add: %s\n", entry->d_name);
+            output->size--;
+            continue;
+        }
         Stat fileStat;
-        stat(entry->d_name, &fileStat);
         char fullpath[_strlen(path)
                     + _strlen(PATH_SEP)
                     + _strlen(entry->d_name)
                     + 1];
         stat(build_path(fullpath, path, entry->d_name), &fileStat);
-        output->array[i] = get_file_from_stat(&fileStat, entry->d_name);
+        output->array[i++] = get_file_from_stat(&fileStat, entry->d_name);
     }
 }
 
