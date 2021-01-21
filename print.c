@@ -84,7 +84,7 @@ static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_
     initialize_file_array(output, n_files);
     while ((entry = readdir(folder)))
     {
-        if (starts_with(entry->d_name, '.') && !show_hidden)
+        if (starts_with(entry->d_name, HIDDEN_FILE_CHAR) && !show_hidden)
         {
             output->size--;
             continue;

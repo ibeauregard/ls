@@ -5,6 +5,7 @@
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
 #define NEWLINE '\n'
+#define HIDDEN_FILE_CHAR '.'
 
 #ifndef STRUCT_DIRENT
 #define STRUCT_DIRENT
