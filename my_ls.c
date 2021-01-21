@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "my_ls.h"
 #include "_string.h"
 #include "sort.h"
@@ -102,14 +101,6 @@ void split_operands(const Operands* operands, FileArray* directories, FileArray*
         node = node->next;
         free(current);
     }
-}
-
-FileNode* get_file_node(const Stat* fileStat, char* path)
-{
-    FileNode* node = malloc(sizeof (FileNode));
-    node->file = get_file_from_stat(fileStat, path);
-    node->next = NULL;
-    return node;
 }
 
 void print(FileArray* files, bool timesort)

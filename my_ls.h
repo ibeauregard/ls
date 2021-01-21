@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <dirent.h>
-#include "file.h"
 #include "file_array.h"
+#include "file_node.h"
 
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
@@ -12,15 +12,6 @@
 #ifndef STRUCT_DIRENT
 #define STRUCT_DIRENT
 typedef struct dirent Dirent;
-#endif
-
-#ifndef STRUCT_FILE_NODE
-#define STRUCT_FILE_NODE
-typedef struct s_file_node
-{
-    File* file;
-    struct s_file_node* next;
-} FileNode;
 #endif
 
 #ifndef STRUCT_OPERANDS
@@ -42,8 +33,6 @@ int handle_operand(char* path, Operands* operands);
 void update_operand_counts(Operands* operands, const FileNode* node);
 void update_links(Operands* operands, FileNode* node);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
-
-FileNode* get_file_node(const Stat* fileStat, char* path);
 
 void print(FileArray* files, bool timesort);
 void print_dirs(FileArray* directories, bool nondirs, bool timesort);
