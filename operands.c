@@ -23,6 +23,7 @@ int parse_arguments(int n_arguments, char** arguments, Operands* operands)
 
 static void initialize_operands(Operands* operands)
 {
+    operands->a_switch = operands->t_switch = false;
     operands->n_dirs = operands->n_nondirs = 0;
     operands->first = operands->last = NULL;
 }

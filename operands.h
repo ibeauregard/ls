@@ -1,5 +1,6 @@
 #include "file_array.h"
 #include "file_node.h"
+#include <stdbool.h>
 
 #define INVALID_ARG_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 
@@ -7,6 +8,8 @@
 #define STRUCT_OPERANDS
 typedef struct
 {
+    bool a_switch;
+    bool t_switch;
     uint n_dirs;
     uint n_nondirs;
     FileNode* first;
