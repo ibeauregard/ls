@@ -1,4 +1,3 @@
-#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 #include "my_ls.h"
@@ -101,15 +100,6 @@ void split_operands(const Operands* operands, FileArray* directories, FileArray*
         node = node->next;
         free(current);
     }
-}
-
-File* get_file_from_stat(const Stat* fileStat, char* path)
-{
-    File* file = malloc(sizeof (File));
-    file->path = path;
-    file->isdir = S_ISDIR(fileStat->st_mode);
-    file->mtim = fileStat->st_mtim;
-    return file;
 }
 
 FileNode* get_file_node(const Stat* fileStat, char* path)

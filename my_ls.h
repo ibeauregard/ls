@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include <time.h>
 #include <dirent.h>
+#include "file.h"
 #include "_string.h"
 
 #define FILENAME_SEP "  "
@@ -10,24 +10,9 @@
 #define NEWLINE '\n'
 #define INVALID_ARG_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 
-#ifndef STRUCT_STAT
-#define STRUCT_STAT
-typedef struct stat Stat;
-#endif
-
 #ifndef STRUCT_DIRENT
 #define STRUCT_DIRENT
 typedef struct dirent Dirent;
-#endif
-
-#ifndef STRUCT_FILE
-#define STRUCT_FILE
-typedef struct
-{
-    char* path;
-    bool isdir;
-    struct timespec mtim;
-} File;
 #endif
 
 #ifndef STRUCT_FILE_ARRAY
@@ -68,7 +53,6 @@ void update_operand_counts(Operands* operands, const FileNode* node);
 void update_links(Operands* operands, FileNode* node);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
 
-File* get_file_from_stat(const Stat* fileStat, char* path);
 FileNode* get_file_node(const Stat* fileStat, char* path);
 FileArray* initialize_file_array(FileArray* files, uint size);
 
