@@ -15,13 +15,13 @@ int my_ls(int n_arguments, char** arguments)
         return EXIT_FAILURE;
     }
     FileArray directories;
-    FileArray nondirectories;
+    FileArray dircontent;
     split_operands(
         &operands,
         initialize_file_array(&directories, operands.n_dirs),
-        initialize_file_array(&nondirectories, operands.n_nondirs)
+        initialize_file_array(&dircontent, operands.n_nondirs)
     );
-    print(&nondirectories, &directories, true);
+    print(&dircontent, &directories, true);
     return EXIT_SUCCESS;
 }
 

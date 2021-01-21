@@ -11,4 +11,4 @@
 typedef struct dirent Dirent;
 #endif
 
-void print(FileArray* nondirectories, FileArray* directories, bool timesort);
+void print(FileArray* dircontent, FileArray* directories, bool timesort);
