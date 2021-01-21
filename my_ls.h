@@ -61,7 +61,8 @@ typedef struct
 {
     uint n_dirs;
     uint n_nondirs;
-    FileNode* first; 
+    FileNode* first;
+    FileNode* last;
 } Operands;
 #endif
 
@@ -69,9 +70,9 @@ int my_ls(int n_arguments, char**arguments);
 
 // operand parsing
 void initialize_operands(Operands* operands);
-int handle_operand(char* path, Operands* operands, FileNode** last);
+int handle_operand(char* path, Operands* operands);
 void update_operand_counts(Operands* operands, FileNode* node);
-void update_links(Operands* operands, FileNode** last, FileNode* node);
+void update_links(Operands* operands, FileNode* node);
 void split_operands(Operands* operands, FileArray* directories, FileArray* nondirectories);
 
 File* get_file_from_stat(Stat* fileStat, char* path);

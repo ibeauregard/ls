@@ -19,10 +19,9 @@ int my_ls(int n_arguments, char**arguments)
     }
     Operands operands;
     initialize_operands(&operands);
-    FileNode* last = NULL;
     for (int i = 0; i < n_arguments; i++)
     {
-        if (handle_operand(arguments[i], &operands, &last))
+        if (handle_operand(arguments[i], &operands))
         {
             return operand_error(arguments[i], &operands);
         }
@@ -47,10 +46,10 @@ int my_ls(int n_arguments, char**arguments)
 void initialize_operands(Operands* operands)
 {
     operands->n_dirs = operands->n_nondirs = 0;
-    operands->first = NULL;
+    operands->first = operands->last = NULL;
 }
 
-int handle_operand(char* path, Operands* operands, FileNode** last)
+int handle_operand(char* path, Operands* operands)
 {
     Stat fileStat;
     if (stat(path, &fileStat) < 0)
@@ -59,7 +58,7 @@ int handle_operand(char* path, Operands* operands, FileNode** last)
     }
     FileNode* node = get_file_node(&fileStat, path);
     update_operand_counts(operands, node);
-    update_links(operands, last, node);
+    update_links(operands, node);
     return EXIT_SUCCESS;
 }
 
@@ -75,16 +74,15 @@ void update_operand_counts(Operands* operands, FileNode* node)
     }
 }
 
-void update_links(Operands* operands, FileNode** last, FileNode* node)
+void update_links(Operands* operands, FileNode* node)
 {
     if (!operands->first)
     {
-        operands->first = node;
-        *last = node;
+        operands->first = operands->last = node;
     }
     else
     {
-        *last = (*last)->next = node;
+        operands->last = operands->last->next = node;
     }
 }
 
