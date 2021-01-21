@@ -10,13 +10,9 @@ int my_ls(int n_arguments, char** arguments)
         return my_ls(1, arguments);
     }
     Operands operands;
-    initialize_operands(&operands);
-    for (int i = 0; i < n_arguments; i++)
+    if (parse_arguments(n_arguments, arguments, &operands))
     {
-        if (handle_operand(arguments[i], &operands))
-        {
-            return operand_error(arguments[i], &operands);
-        }
+        return EXIT_FAILURE;
     }
     FileArray directories;
     FileArray nondirectories;

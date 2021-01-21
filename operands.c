@@ -1,17 +1,33 @@
 #include "operands.h"
 #include <stdio.h>
 
+static void initialize_operands(Operands* operands);
+static int handle_operand(char* path, Operands* operands);
 static void update_operand_counts(Operands* operands, const FileNode* node);
 static void update_links(Operands* operands, FileNode* node);
+static int operand_error(const char* path, const Operands* operands);
 static void free_operands(const Operands* operands);
 
-void initialize_operands(Operands* operands)
+int parse_arguments(int n_arguments, char** arguments, Operands* operands)
+{
+    initialize_operands(operands);
+    for (int i = 0; i < n_arguments; i++)
+    {
+        if (handle_operand(arguments[i], operands))
+        {
+            return operand_error(arguments[i], operands);
+        }
+    }
+    return EXIT_SUCCESS;
+}
+
+static void initialize_operands(Operands* operands)
 {
     operands->n_dirs = operands->n_nondirs = 0;
     operands->first = operands->last = NULL;
 }
 
-int handle_operand(char* path, Operands* operands)
+static int handle_operand(char* path, Operands* operands)
 {
     Stat fileStat;
     if (stat(path, &fileStat) < 0)
@@ -67,7 +83,7 @@ void split_operands(const Operands* operands, FileArray* directories, FileArray*
     }
 }
 
-int operand_error(const char* path, const Operands* operands)
+static int operand_error(const char* path, const Operands* operands)
 {
     fprintf(stderr, INVALID_ARG_MESSAGE, path);
     free_operands(operands);

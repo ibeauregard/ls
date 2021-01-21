@@ -14,7 +14,5 @@ typedef struct
 } Operands;
 #endif
 
-void initialize_operands(Operands* operands);
-int handle_operand(char* path, Operands* operands);
+int parse_arguments(int n_arguments, char** arguments, Operands* operands);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
-int operand_error(const char* path, const Operands* operands);
