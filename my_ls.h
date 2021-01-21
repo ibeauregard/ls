@@ -2,7 +2,6 @@
 #include <dirent.h>
 #include "file.h"
 #include "file_array.h"
-#include "_string.h"
 
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
@@ -45,15 +44,6 @@ void update_links(Operands* operands, FileNode* node);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
 
 FileNode* get_file_node(const Stat* fileStat, char* path);
-
-//sorting
-FileArray* sort(FileArray* files, bool time);
-void sort_partitions(const FileArray* whole, uint i, bool time);
-bool file_lower_than(const File* f1, const File* f2, bool time);
-bool file_path_lower_than(const File* f1, const File* f2);
-bool file_time_lower_than(const File* f1, const File* f2);
-bool string_lower_than(const char* s1, const char* s2);
-void swap(File** f1, File** f2);
 
 void print(FileArray* files, bool timesort);
 void print_dirs(FileArray* directories, bool nondirs, bool timesort);

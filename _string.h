@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdbool.h>
 
 char* _strcpy(char* dest, const char* source);

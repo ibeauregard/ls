@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "_string.h"
 
 char* _strcpy(char* dest, const char* source)
