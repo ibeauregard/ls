@@ -18,15 +18,6 @@ typedef struct stat Stat;
 typedef struct dirent Dirent;
 #endif
 
-#ifndef STRUCT_STRING_ARRAY
-#define STRUCT_STRING_ARRAY
-typedef struct
-{
-    uint size;
-    char** array;
-} StringArray;
-#endif
-
 #ifndef STRUCT_FILE
 #define STRUCT_FILE
 typedef struct
