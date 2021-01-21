@@ -184,12 +184,6 @@ bool file_time_lower_than(const File* f1, const File* f2)
     return f1->mtim.tv_sec > f2->mtim.tv_sec;
 }
 
-bool string_lower_than(const char* s1, const char* s2)
-{
-    for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
-    return *s1 < *s2;
-}
-
 void swap(File** f1, File** f2)
 {
     File* temp = *f1;

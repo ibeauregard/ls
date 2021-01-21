@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "_string.h"
 
 char* _strcpy(char* dest, const char* source)
 {
@@ -28,4 +29,10 @@ uint _strlen(const char* str)
     uint len;
     for (len = 0; str[len]; len++);
     return len;
+}
+
+bool string_lower_than(const char* s1, const char* s2)
+{
+    for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
+    return *s1 < *s2;
 }
