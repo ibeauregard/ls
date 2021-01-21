@@ -110,13 +110,6 @@ FileNode* get_file_node(const Stat* fileStat, char* path)
     return node;
 }
 
-FileArray* initialize_file_array(FileArray* files, uint size)
-{
-    files->size = size;
-    files->array = malloc(size * sizeof (File*));
-    return files;
-}
-
 FileArray* sort(FileArray* files, bool time)
 {
     if (files->size <= 1)

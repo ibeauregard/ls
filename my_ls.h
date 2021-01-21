@@ -1,7 +1,7 @@
 #include <stdbool.h>
-#include <stdlib.h>
 #include <dirent.h>
 #include "file.h"
+#include "file_array.h"
 #include "_string.h"
 
 #define FILENAME_SEP "  "
@@ -13,15 +13,6 @@
 #ifndef STRUCT_DIRENT
 #define STRUCT_DIRENT
 typedef struct dirent Dirent;
-#endif
-
-#ifndef STRUCT_FILE_ARRAY
-#define STRUCT_FILE_ARRAY
-typedef struct
-{
-    uint size;
-    File** array;
-} FileArray;
 #endif
 
 #ifndef STRUCT_FILE_NODE
@@ -54,7 +45,6 @@ void update_links(Operands* operands, FileNode* node);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
 
 FileNode* get_file_node(const Stat* fileStat, char* path);
-FileArray* initialize_file_array(FileArray* files, uint size);
 
 //sorting
 FileArray* sort(FileArray* files, bool time);
