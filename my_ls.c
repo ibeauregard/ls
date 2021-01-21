@@ -147,7 +147,7 @@ FileArray* sort(FileArray* files, bool time)
     return files;
 }
 
-void sort_partitions(const FileArray* whole, const uint i, bool time)
+void sort_partitions(const FileArray* whole, uint i, bool time)
 {
     FileArray partition = *whole;
     partition.size = i;
@@ -246,9 +246,9 @@ void print_directory_content(const File* directory, bool timesort)
         Dirent* entry = readdir(folder);
         Stat fileStat;
         stat(entry->d_name, &fileStat);
-        char path[strlen(directory->path)
-                    + strlen(PATH_SEP)
-                    + strlen(entry->d_name)
+        char path[_strlen(directory->path)
+                    + _strlen(PATH_SEP)
+                    + _strlen(entry->d_name)
                     + 1];
         stat(build_path(path, directory->path, entry->d_name), &fileStat);
         files.array[i] = get_file_from_stat(&fileStat, entry->d_name);
@@ -264,10 +264,10 @@ void print_newline()
 
 char* build_path(char* fullpath, const char* dirpath, const char* name)
 {
-    return my_strcat(my_strcat(my_strcpy(fullpath, dirpath), PATH_SEP), name);   
+    return _strcat(_strcat(_strcpy(fullpath, dirpath), PATH_SEP), name);   
 }
 
-char* my_strcpy(char* dest, const char* source)
+char* _strcpy(char* dest, const char* source)
 {
     uint i;
     for (i = 0; source[i]; i++)
@@ -278,7 +278,7 @@ char* my_strcpy(char* dest, const char* source)
     return dest;
 }
 
-char* my_strcat(char* dest, const char* source)
+char* _strcat(char* dest, const char* source)
 {
     uint i, j;
     for (i = 0; dest[i]; i++);
@@ -288,6 +288,13 @@ char* my_strcat(char* dest, const char* source)
     }
     dest[i + j] = 0;
     return dest;
+}
+
+uint _strlen(const char* str)
+{
+    uint len;
+    for (len = 0; str[len]; len++);
+    return len;
 }
 
 void free_operands(const Operands* operands)
