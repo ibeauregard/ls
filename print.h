@@ -1,4 +1,5 @@
 #include "file_array.h"
+#include "options.h"
 #include <stdbool.h>
 
 #define FILENAME_SEP "  "
@@ -10,4 +11,4 @@
 typedef struct dirent Dirent;
 #endif
 
-void print(FileArray* dircontent, FileArray* directories, bool timesort);
+void print(FileArray* dircontent, FileArray* directories, Options* options);

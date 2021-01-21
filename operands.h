@@ -1,5 +1,6 @@
 #include "file_array.h"
 #include "file_node.h"
+#include "options.h"
 #include <stdbool.h>
 
 #define CURRENT_DIR "."
@@ -11,8 +12,7 @@
 #define STRUCT_OPERANDS
 typedef struct
 {
-    bool a_option;
-    bool t_option;
+    Options* options;
     uint n_dirs;
     uint n_nondirs;
     FileNode* first;

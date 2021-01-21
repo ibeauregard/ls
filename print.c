@@ -12,10 +12,11 @@ static void parse_folder(DIR* folder, const char* path, uint n_files, FileArray*
 static void print_newline();
 static char* build_path(char* fullpath, const char* dirpath, const char* name);
 
-void print(FileArray* dircontent, FileArray* directories, bool timesort)
+void print(FileArray* dircontent, FileArray* directories, Options* options)
 {
-    print_files(dircontent, timesort);
-    print_directories(directories, dircontent->size, timesort);
+    print_files(dircontent, options->t);
+    print_directories(directories, dircontent->size, options->t);
+    free(options);
 }
 
 static void print_files(FileArray* files, bool timesort)

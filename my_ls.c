@@ -16,7 +16,7 @@ int my_ls(int n_arguments, char** arguments)
         initialize_file_array(&directories, operands.n_dirs),
         initialize_file_array(&dircontent, operands.n_nondirs)
     );
-    print(&dircontent, &directories, true);
+    print(&dircontent, &directories, operands.options);
     return EXIT_SUCCESS;
 }
 

@@ -26,7 +26,7 @@ static int _parse_arguments(int n_arguments, char** arguments, Operands* operand
             return EXIT_FAILURE;
         }
     }
-    if (!(operands->n_dirs + operands->n_nondirs))
+    if (operands->n_dirs + operands->n_nondirs == 0)
     {
         char* arguments[1] = {CURRENT_DIR};
         return _parse_arguments(1, arguments, operands);
@@ -36,7 +36,7 @@ static int _parse_arguments(int n_arguments, char** arguments, Operands* operand
 
 static Operands* initialize_operands(Operands* operands)
 {
-    operands->a_option = operands->t_option = false;
+    operands->options = initialize_options();
     operands->n_dirs = operands->n_nondirs = 0;
     operands->first = operands->last = NULL;
     return operands;
@@ -68,10 +68,10 @@ static int handle_option(char* option, Operands* operands)
     switch (option[0])
     {
         case 'a':
-            operands->a_option = true;
+            operands->options->a = true;
             return handle_option(option + 1, operands);
         case 't':
-            operands->t_option = true;
+            operands->options->t = true;
             return handle_option(option + 1, operands);
         default:
             return option_error(option[0], operands);
@@ -145,4 +145,5 @@ static void free_operands(const Operands* operands)
         node = node->next;
         free(current);
     }
+    free(operands->options);
 }
