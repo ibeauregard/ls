@@ -2,11 +2,6 @@
 #include "my_ls.h"
 #include "print.h"
 
-int main(int argc, char** argv)
-{
-    return my_ls(argc - 1, argv + 1);
-}
-
 int my_ls(int n_arguments, char** arguments)
 {
     if (!n_arguments)
@@ -115,4 +110,9 @@ int operand_error(const char* path, const Operands* operands)
     fprintf(stderr, INVALID_ARG_MESSAGE, path);
     free_operands(operands);
     return EXIT_FAILURE;
+}
+
+int main(int argc, char** argv)
+{
+    return my_ls(argc - 1, argv + 1);
 }

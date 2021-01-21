@@ -14,8 +14,6 @@ typedef struct
 } Operands;
 #endif
 
-int my_ls(int n_arguments, char**arguments);
-
 // operand parsing
 void initialize_operands(Operands* operands);
 int handle_operand(char* path, Operands* operands);
