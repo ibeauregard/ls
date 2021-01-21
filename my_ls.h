@@ -71,36 +71,34 @@ int my_ls(int n_arguments, char**arguments);
 // operand parsing
 void initialize_operands(Operands* operands);
 int handle_operand(char* path, Operands* operands);
-void update_operand_counts(Operands* operands, FileNode* node);
+void update_operand_counts(Operands* operands, const FileNode* node);
 void update_links(Operands* operands, FileNode* node);
-void split_operands(Operands* operands, FileArray* directories, FileArray* nondirectories);
+void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
 
-File* get_file_from_stat(Stat* fileStat, char* path);
-FileNode* get_file_node(Stat* fileStat, char* path);
+File* get_file_from_stat(const Stat* fileStat, char* path);
+FileNode* get_file_node(const Stat* fileStat, char* path);
 FileArray* initialize_file_array(FileArray* files, uint size);
 
 //sorting
 FileArray* sort(FileArray* files, bool time);
-void sort_partitions(FileArray* whole, uint i, bool time);
-bool file_lower_than(File* f1, File* f2, bool time);
-bool file_path_lower_than(File* f1, File* f2);
-bool file_time_lower_than(File* f1, File* f2);
-bool string_lower_than(char* s1, char* s2);
+void sort_partitions(const FileArray* whole, uint i, bool time);
+bool file_lower_than(const File* f1, const File* f2, bool time);
+bool file_path_lower_than(const File* f1, const File* f2);
+bool file_time_lower_than(const File* f1, const File* f2);
+bool string_lower_than(const char* s1, const char* s2);
 void swap(File** f1, File** f2);
 
 void print(FileArray* files, bool timesort);
 void print_dirs(FileArray* directories, bool nondirs, bool timesort);
-void print_directory_content(File* directory, bool timesort);
+void print_directory_content(const File* directory, bool timesort);
 
 //strings
-char* build_path(char* fullpath, char* dirpath, char* name);
+char* build_path(char* fullpath, const char* dirpath, const char* name);
 char* my_strcpy(char* dest, const char* source);
 char* my_strcat(char* dest, const char* source);
 
 //free
-void free_operands(Operands* operands);
-void free_all(FileArray* directories, FileArray* nondirectories);
-void free_files(FileArray* files);
+void free_operands(const Operands* operands);
 
 //errors
-int operand_error(char* path, Operands* operands);
+int operand_error(const char* path, const Operands* operands);

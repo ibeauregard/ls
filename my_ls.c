@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     return my_ls(argc - 1, argv + 1);
 }
 
-int my_ls(int n_arguments, char**arguments)
+int my_ls(int n_arguments, char** arguments)
 {
     if (!n_arguments)
     {
@@ -62,7 +62,7 @@ int handle_operand(char* path, Operands* operands)
     return EXIT_SUCCESS;
 }
 
-void update_operand_counts(Operands* operands, FileNode* node)
+void update_operand_counts(Operands* operands, const FileNode* node)
 {
     if (node->file->isdir)
     {
@@ -79,14 +79,12 @@ void update_links(Operands* operands, FileNode* node)
     if (!operands->first)
     {
         operands->first = operands->last = node;
+        return;
     }
-    else
-    {
-        operands->last = operands->last->next = node;
-    }
+    operands->last = operands->last->next = node;
 }
 
-void split_operands(Operands* operands, FileArray* directories, FileArray* nondirectories)
+void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories)
 {
     uint dirIndex = 0;
     uint nondirIndex = 0;
@@ -107,7 +105,7 @@ void split_operands(Operands* operands, FileArray* directories, FileArray* nondi
     }
 }
 
-File* get_file_from_stat(Stat* fileStat, char* path)
+File* get_file_from_stat(const Stat* fileStat, char* path)
 {
     File* file = malloc(sizeof (File));
     file->path = path;
@@ -116,7 +114,7 @@ File* get_file_from_stat(Stat* fileStat, char* path)
     return file;
 }
 
-FileNode* get_file_node(Stat* fileStat, char* path)
+FileNode* get_file_node(const Stat* fileStat, char* path)
 {
     FileNode* node = malloc(sizeof (FileNode));
     node->file = get_file_from_stat(fileStat, path);
@@ -151,7 +149,7 @@ FileArray* sort(FileArray* files, bool time)
     return files;
 }
 
-void sort_partitions(FileArray* whole, uint i, bool time)
+void sort_partitions(const FileArray* whole, const uint i, bool time)
 {
     FileArray partition = *whole;
     partition.size = i;
@@ -161,7 +159,7 @@ void sort_partitions(FileArray* whole, uint i, bool time)
     sort(&partition, time);
 }
 
-bool file_lower_than(File* f1, File* f2, bool time)
+bool file_lower_than(const File* f1, const File* f2, bool time)
 {
     if (time)
     {
@@ -170,12 +168,12 @@ bool file_lower_than(File* f1, File* f2, bool time)
     return file_path_lower_than(f1, f2);
 }
 
-bool file_path_lower_than(File* f1, File* f2)
+bool file_path_lower_than(const File* f1, const File* f2)
 {
     return string_lower_than(f1->path, f2->path);
 }
 
-bool file_time_lower_than(File* f1, File* f2)
+bool file_time_lower_than(const File* f1, const File* f2)
 {
     if (f1->mtim.tv_sec == f2->mtim.tv_sec)
     {
@@ -188,7 +186,7 @@ bool file_time_lower_than(File* f1, File* f2)
     return f1->mtim.tv_sec > f2->mtim.tv_sec;
 }
 
-bool string_lower_than(char* s1, char* s2)
+bool string_lower_than(const char* s1, const char* s2)
 {
     for (; *s1 && *s2 && *s1 == *s2; s1++, s2++);
     return *s1 < *s2;
@@ -236,7 +234,7 @@ void print_dirs(FileArray* dirs, bool nondirs, bool timesort)
     free(dirs->array);
 }
 
-void print_directory_content(File* directory, bool timesort)
+void print_directory_content(const File* directory, bool timesort)
 {
     DIR* folder = opendir(directory->path);
     uint n_files;
@@ -261,7 +259,7 @@ void print_directory_content(File* directory, bool timesort)
     closedir(folder);
 }
 
-char* build_path(char* fullpath, char* dirpath, char* name)
+char* build_path(char* fullpath, const char* dirpath, const char* name)
 {
     return my_strcat(my_strcat(my_strcpy(fullpath, dirpath), PATH_SEP), name);   
 }
@@ -289,7 +287,7 @@ char* my_strcat(char* dest, const char* source)
     return dest;
 }
 
-void free_operands(Operands* operands)
+void free_operands(const Operands* operands)
 {
     FileNode* node = operands->first;
     while (node)
@@ -301,7 +299,7 @@ void free_operands(Operands* operands)
     }
 }
 
-int operand_error(char* path, Operands* operands)
+int operand_error(const char* path, const Operands* operands)
 {
     fprintf(stderr, INVALID_ARG_MESSAGE, path);
     free_operands(operands);
