@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+bool starts_with(const char* str, char c);
 char* _strcpy(char* dest, const char* source);
 char* _strcat(char* dest, const char* source);
 uint _strlen(const char* str);

@@ -3,7 +3,6 @@
 
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
-#define CURRENT_DIR "."
 #define NEWLINE '\n'
 
 #ifndef STRUCT_DIRENT

@@ -1,44 +1,81 @@
 #include "operands.h"
+#include "_string.h"
 #include <stdio.h>
 
-static void initialize_operands(Operands* operands);
-static int handle_operand(char* path, Operands* operands);
+static int _parse_arguments(int n_arguments, char** arguments, Operands* operands);
+static Operands* initialize_operands(Operands* operands);
+static int handle_argument(char* path, Operands* operands);
+static int handle_option(char* option, Operands* operands);
 static void update_operand_counts(Operands* operands, const FileNode* node);
 static void update_links(Operands* operands, FileNode* node);
-static int operand_error(const char* path, const Operands* operands);
+static int operand_error(const char* operand, const Operands* operands);
+static int option_error(char option, const Operands* operands);
 static void free_operands(const Operands* operands);
 
 int parse_arguments(int n_arguments, char** arguments, Operands* operands)
 {
-    initialize_operands(operands);
+    return _parse_arguments(n_arguments, arguments, initialize_operands(operands));
+}
+
+static int _parse_arguments(int n_arguments, char** arguments, Operands* operands)
+{
     for (int i = 0; i < n_arguments; i++)
     {
-        if (handle_operand(arguments[i], operands))
+        if (handle_argument(arguments[i], operands))
         {
-            return operand_error(arguments[i], operands);
+            return EXIT_FAILURE;
         }
+    }
+    if (!(operands->n_dirs + operands->n_nondirs))
+    {
+        char* arguments[1] = {CURRENT_DIR};
+        return _parse_arguments(1, arguments, operands);
     }
     return EXIT_SUCCESS;
 }
 
-static void initialize_operands(Operands* operands)
+static Operands* initialize_operands(Operands* operands)
 {
-    operands->a_switch = operands->t_switch = false;
+    operands->a_option = operands->t_option = false;
     operands->n_dirs = operands->n_nondirs = 0;
     operands->first = operands->last = NULL;
+    return operands;
 }
 
-static int handle_operand(char* path, Operands* operands)
+static int handle_argument(char* argument, Operands* operands)
 {
-    Stat fileStat;
-    if (stat(path, &fileStat) < 0)
+    if (starts_with(argument, OPTION_ID) && _strlen(argument) > 1)
     {
-        return EXIT_FAILURE;
+        return handle_option(argument + 1, operands);   
     }
-    FileNode* node = get_file_node(&fileStat, path);
+    Stat fileStat;
+    if (stat(argument, &fileStat) < 0)
+    {
+        return operand_error(argument, operands);
+    }
+    FileNode* node = get_file_node(&fileStat, argument);
     update_operand_counts(operands, node);
     update_links(operands, node);
     return EXIT_SUCCESS;
+}
+
+static int handle_option(char* option, Operands* operands)
+{
+    if (!option[0])
+    {
+        return EXIT_SUCCESS;
+    }
+    switch (option[0])
+    {
+        case 'a':
+            operands->a_option = true;
+            return handle_option(option + 1, operands);
+        case 't':
+            operands->t_option = true;
+            return handle_option(option + 1, operands);
+        default:
+            return option_error(option[0], operands);
+    }
 }
 
 static void update_operand_counts(Operands* operands, const FileNode* node)
@@ -84,9 +121,16 @@ void split_operands(const Operands* operands, FileArray* directories, FileArray*
     }
 }
 
-static int operand_error(const char* path, const Operands* operands)
+static int operand_error(const char* operand, const Operands* operands)
 {
-    fprintf(stderr, INVALID_ARG_MESSAGE, path);
+    fprintf(stderr, INVALID_OPERAND_MESSAGE, operand);
+    free_operands(operands);
+    return EXIT_FAILURE;
+}
+
+static int option_error(char option, const Operands* operands)
+{
+    fprintf(stderr, INVALID_OPTION_MESSAGE, option);
     free_operands(operands);
     return EXIT_FAILURE;
 }

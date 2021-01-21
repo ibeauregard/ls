@@ -1,5 +1,10 @@
 #include "_string.h"
 
+bool starts_with(const char* str, char c)
+{
+    return str && str[0] == c;
+}
+
 char* _strcpy(char* dest, const char* source)
 {
     uint i;
