@@ -1,7 +1,5 @@
 #include "my_ls.h"
-#include <unistd.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -37,7 +35,7 @@ int my_ls(int n_arguments, char** arguments)
     print(&nondirectories, true);
     if (nondirectories.size && directories.size)
     {
-        puts("");
+        print_newline();
     }
     print_dirs(&directories, nondirectories.size, true);
     return EXIT_SUCCESS;
@@ -211,7 +209,7 @@ void print(FileArray* files, bool timesort)
     free(files->array);
     if (i)
     {
-        puts("");
+        print_newline();
     }
 }
 
@@ -228,7 +226,7 @@ void print_dirs(FileArray* dirs, bool nondirs, bool timesort)
         free(dirs->array[i]);
         if (i < dirs->size - 1)
         {
-            puts("");
+            print_newline();
         }
     }
     free(dirs->array);
@@ -257,6 +255,11 @@ void print_directory_content(const File* directory, bool timesort)
     }
     print(&files, timesort);
     closedir(folder);
+}
+
+void print_newline()
+{
+    printf("%c", NEWLINE);
 }
 
 char* build_path(char* fullpath, const char* dirpath, const char* name)

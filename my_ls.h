@@ -6,6 +6,7 @@
 #define FILENAME_SEP "  "
 #define PATH_SEP "/"
 #define CURRENT_DIR "."
+#define NEWLINE '\n'
 #define INVALID_ARG_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 
 #ifndef STRUCT_STAT
@@ -91,6 +92,7 @@ void swap(File** f1, File** f2);
 void print(FileArray* files, bool timesort);
 void print_dirs(FileArray* directories, bool nondirs, bool timesort);
 void print_directory_content(const File* directory, bool timesort);
+void print_newline();
 
 //strings
 char* build_path(char* fullpath, const char* dirpath, const char* name);
