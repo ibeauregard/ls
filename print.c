@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <dirent.h>
 
-static void print_files(FileArray* files, bool timesort);
+static void print_files(FileArray* files, SortKey* sortKey);
 static void print_directories(FileArray* dirs, bool nondirs, Options* options);
 static void print_dircontent(const File* directory, Options* options);
 static uint count_files(const File* directory);
@@ -17,14 +17,14 @@ static SortKey* sort_key(bool timesort);
 
 void print(FileArray* files, FileArray* directories, Options* options)
 {
-    print_files(files, options->t);
+    print_files(files, sort_key(options->t));
     print_directories(directories, files->size, options);
     free(options);
 }
 
-static void print_files(FileArray* files, bool timesort)
+static void print_files(FileArray* files, SortKey* sortKey)
 {
-    sort(files, sort_key(timesort));
+    sort(files, sortKey);
     uint i;
     for (i = 0; i < files->size; i++)
     {
@@ -47,7 +47,7 @@ static void print_directories(FileArray* dirs, bool nondirs, Options* options)
     sort(dirs, sort_key(options->t));
     for (uint i = 0; i < dirs->size; i++)
     {
-        if (nondirs || i >= 1)
+        if (nondirs || dirs->size > 1)
         {
             printf("%s:\n", dirs->array[i]->path);
         }
@@ -67,7 +67,7 @@ static void print_dircontent(const File* directory, Options* options)
     FileArray files;
     DIR* folder = opendir(directory->path);
     parse_folder(folder, directory->path, n_files, options->a, &files);
-    print_files(&files, options->t);
+    print_files(&files, sort_key(options->t));
     closedir(folder);
 }
 
