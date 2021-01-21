@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 LINKERFLAG = -lm
-SRCS = _string.c my_ls.c
+SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 MAIN = my_ls
 .PHONY = all clean
