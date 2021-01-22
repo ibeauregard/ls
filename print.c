@@ -95,7 +95,7 @@ static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_
                     + _strlen(entry->d_name)
                     + 1];
         stat(build_path(fullpath, path, entry->d_name), &fileStat);
-        output->array[i++] = get_file_from_stat(&fileStat, entry->d_name);
+        output->array[i++] = get_file(&fileStat, entry->d_name);
     }
 }
 

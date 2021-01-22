@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "file.h"
 
-File* get_file_from_stat(const Stat* fileStat, char* path)
+File* get_file(const Stat* fileStat, char* path)
 {
     File* file = malloc(sizeof (File));
     file->path = path;

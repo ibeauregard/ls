@@ -17,4 +17,4 @@ typedef struct
 } File;
 #endif
 
-File* get_file_from_stat(const Stat* fileStat, char* path);
+File* get_file(const Stat* fileStat, char* path);
