@@ -5,19 +5,16 @@
 #include <dirent.h>
 
 static void print_files(FileArray* files, SortKey* sortKey);
-static void print_directories(FileArray* dirs, bool nondirs, Options* options);
-static void print_dircontent(const File* directory, Options* options);
+static void print_directories(FileArray* dirs, bool nondirs, PrintOptions* options);
+static void print_dircontent(const File* directory, PrintOptions* options);
 static uint count_files(const File* directory);
 static void parse_folder(DIR* folder, const char* path, uint n_files, bool show_hidden, FileArray* output);
 static void print_newline();
 static char* build_path(char* fullpath, const char* dirpath, const char* name);
-static bool file_time_lower_than(const File* f1, const File* f2);
-static bool file_path_lower_than(const File* f1, const File* f2);
-static SortKey* sort_key(bool timesort);
 
-void print(FileArray* files, FileArray* directories, Options* options)
+void print(FileArray* files, FileArray* directories, PrintOptions* options)
 {
-    print_files(files, sort_key(options->t));
+    print_files(files, options->sortKey);
     print_directories(directories, files->size, options);
     free(options);
 }
@@ -38,13 +35,13 @@ static void print_files(FileArray* files, SortKey* sortKey)
     }
 }
 
-static void print_directories(FileArray* dirs, bool nondirs, Options* options)
+static void print_directories(FileArray* dirs, bool nondirs, PrintOptions* options)
 {
     if (nondirs && dirs->size)
     {
         print_newline();
     }
-    sort(dirs, sort_key(options->t));
+    sort(dirs, options->sortKey);
     for (uint i = 0; i < dirs->size; i++)
     {
         if (nondirs || dirs->size > 1)
@@ -61,13 +58,13 @@ static void print_directories(FileArray* dirs, bool nondirs, Options* options)
     free(dirs->array);
 }
 
-static void print_dircontent(const File* directory, Options* options)
+static void print_dircontent(const File* directory, PrintOptions* options)
 {
     uint n_files = count_files(directory);
     FileArray files;
     DIR* folder = opendir(directory->path);
-    parse_folder(folder, directory->path, n_files, options->a, &files);
-    print_files(&files, sort_key(options->t));
+    parse_folder(folder, directory->path, n_files, options->showHidden, &files);
+    print_files(&files, options->sortKey);
     closedir(folder);
 }
 
@@ -110,27 +107,4 @@ static void print_newline()
 static char* build_path(char* fullpath, const char* dirpath, const char* name)
 {
     return _strcat(_strcat(_strcpy(fullpath, dirpath), PATH_SEP), name);   
-}
-
-static bool file_time_lower_than(const File* f1, const File* f2)
-{
-    if (f1->mtim.tv_sec == f2->mtim.tv_sec)
-    {
-        if (f1->mtim.tv_nsec == f2->mtim.tv_nsec)
-        {
-            return file_path_lower_than(f1, f2);
-        }
-        return f1->mtim.tv_nsec > f2->mtim.tv_nsec;
-    }
-    return f1->mtim.tv_sec > f2->mtim.tv_sec;
-}
-
-static bool file_path_lower_than(const File* f1, const File* f2)
-{
-    return string_lower_than(f1->path, f2->path);
-}
-
-static SortKey* sort_key(bool timesort)
-{
-    return timesort ? &file_time_lower_than : &file_path_lower_than;
 }

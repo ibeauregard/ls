@@ -1,5 +1,6 @@
 #include "operands.h"
 #include "file_array.h"
+#include "print_options.h"
 #include "print.h"
 
 int my_ls(int n_arguments, char** arguments)
@@ -16,7 +17,7 @@ int my_ls(int n_arguments, char** arguments)
         initialize_file_array(&directories, operands.n_dirs),
         initialize_file_array(&dircontent, operands.n_nondirs)
     );
-    print(&dircontent, &directories, operands.options);
+    print(&dircontent, &directories, convert(operands.options));
     return EXIT_SUCCESS;
 }
 
