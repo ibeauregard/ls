@@ -1,20 +1,22 @@
+#ifndef FILE_H
+#define FILE_H
+
 #include <stdbool.h>
 #include <time.h>
 #include <sys/stat.h>
 
-#ifndef STRUCT_STAT
-#define STRUCT_STAT
-typedef struct stat Stat;
+#if defined(__APPLE__) || defined(__NetBSD__)
+#define st_mtim st_mtimespec
 #endif
 
-#ifndef STRUCT_FILE
-#define STRUCT_FILE
+typedef struct stat Stat;
+
 typedef struct
 {
     char* path;
     bool isdir;
     struct timespec mtim;
 } File;
-#endif
 
 File* get_file(const Stat* fileStat, char* path);
+#endif

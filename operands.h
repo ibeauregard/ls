@@ -1,3 +1,6 @@
+#ifndef OPERANDS_H
+#define OPERANDS_H
+
 #include "file_array.h"
 #include "file_node.h"
 #include "options.h"
@@ -8,8 +11,6 @@
 #define INVALID_OPERAND_MESSAGE "my_ls: cannot access '%s': No such file or directory\n"
 #define INVALID_OPTION_MESSAGE "my_ls: invalid option -- '%c'\n"
 
-#ifndef STRUCT_OPERANDS
-#define STRUCT_OPERANDS
 typedef struct
 {
     Options* options;
@@ -18,7 +19,8 @@ typedef struct
     FileNode* first;
     FileNode* last;
 } Operands;
-#endif
 
 int parse_arguments(int n_arguments, char** arguments, Operands* operands);
 void split_operands(const Operands* operands, FileArray* directories, FileArray* nondirectories);
+#endif
+
