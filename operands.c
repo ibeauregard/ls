@@ -28,8 +28,7 @@ static int _parse_arguments(int n_arguments, char** arguments, Operands* operand
     }
     if (operands->n_dirs + operands->n_nondirs == 0)
     {
-        char* arguments[1] = {CURRENT_DIR};
-        return _parse_arguments(1, arguments, operands);
+        return _parse_arguments(1, (char* []) {CURRENT_DIR}, operands);
     }
     return EXIT_SUCCESS;
 }
