@@ -2,9 +2,9 @@
 #include "_string.h"
 #include <stdio.h>
 
-static int _parse_arguments(int n_arguments, char** arguments, Operands* operands);
+static int parse_arguments_(int n_arguments, char** arguments, Operands* operands);
 static Operands* initialize_operands(Operands* operands);
-static int handle_argument(char* path, Operands* operands);
+static int handle_argument(char* argument, Operands* operands);
 static int handle_option(char* option, Operands* operands);
 static void update_operand_counts(Operands* operands, const FileNode* node);
 static void update_links(Operands* operands, FileNode* node);
@@ -14,10 +14,10 @@ static void free_operands(const Operands* operands);
 
 int parse_arguments(int n_arguments, char** arguments, Operands* operands)
 {
-    return _parse_arguments(n_arguments, arguments, initialize_operands(operands));
+    return parse_arguments_(n_arguments, arguments, initialize_operands(operands));
 }
 
-static int _parse_arguments(int n_arguments, char** arguments, Operands* operands)
+static int parse_arguments_(int n_arguments, char** arguments, Operands* operands)
 {
     for (int i = 0; i < n_arguments; i++)
     {
@@ -28,7 +28,7 @@ static int _parse_arguments(int n_arguments, char** arguments, Operands* operand
     }
     if (operands->n_dirs + operands->n_nondirs == 0)
     {
-        return _parse_arguments(1, (char* []) {CURRENT_DIR}, operands);
+        return parse_arguments_(1, (char* []) {CURRENT_DIR}, operands);
     }
     return EXIT_SUCCESS;
 }
