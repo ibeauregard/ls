@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -g3
 LINKERFLAG = -lm
 SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
